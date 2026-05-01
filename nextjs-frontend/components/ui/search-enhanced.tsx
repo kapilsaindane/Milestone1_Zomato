@@ -182,12 +182,10 @@ export function SearchEnhanced({
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
               <RatingFilter
-                minRating={filters.minRating}
-                maxRating={filters.maxRating}
-                onRatingChange={(min, max) => {
-                  handleFilterChange('minRating', min)
-                  handleFilterChange('maxRating', max)
+                onRatingChange={(rating) => {
+                  handleFilterChange('minRating', rating)
                 }}
+                selectedRating={filters.minRating}
               />
             </label>
           </div>
