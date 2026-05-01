@@ -3,10 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { SimpleCard, RestaurantSimpleCard } from '@/components/ui/simple-card'
 import { 
   TrendingUp, 
   Users, 
@@ -16,7 +13,12 @@ import {
   ChefHat,
   ArrowRight,
   Target,
-  Award
+  Award,
+  Search,
+  Filter,
+  Heart,
+  BarChart3,
+  Settings
 } from 'lucide-react'
 import Link from 'next/link'
 
