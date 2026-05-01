@@ -1,12 +1,14 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "installCommand": "npm install --force --ignore-scripts",
+  "nodeVersion": "18.x",
+  "installCommand": "npm install --force --legacy-peer-deps --ignore-scripts --no-audit --no-fund",
   "buildCommand": "npm run build",
   "env": {
     "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
     "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender",
     "NODE_ENV": "production",
-    "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
+    "NPM_CONFIG_LEGACY_PEER_DEPS": "true",
+    "NPM_CONFIG_FORCE": "true"
   }
 }
