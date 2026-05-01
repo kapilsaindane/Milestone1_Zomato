@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
+    "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com"
+    }
+  }
+}

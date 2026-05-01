@@ -1,0 +1,27 @@
+services:
+  # Backend API Service with Docker
+  - type: web
+    name: restaurant-recommender-api
+    env: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: HF_DATASET_ID
+        value: ManikaSaini/zomato-restaurant-recommendation
+      - key: TOP_N_CANDIDATES
+        value: 30
+      - key: LOG_LEVEL
+        value: INFO
+      - key: ENVIRONMENT
+        value: production
+      - key: PORT
+        value: 8000
+
+databases:
+  # PostgreSQL Database (if needed)
+  - name: restaurant-db
+    plan: free
