@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pandas
+datasets
+pydantic
+pydantic-settings
+python-dotenv
+pytest
+jinja2
+python-multipart
+groq
