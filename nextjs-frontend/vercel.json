@@ -14,11 +14,22 @@
   ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
-    "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender"
+    "NEXT_PUBLIC_APP_URL": "https://your-project-name.vercel.app",
+    "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender",
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_ENABLE_ANALYTICS": "true",
+    "NEXT_PUBLIC_ENABLE_PWA": "true",
+    "NEXT_PUBLIC_ENABLE_SEO": "true",
+    "NEXT_PUBLIC_API_TIMEOUT": "30000",
+    "NEXT_PUBLIC_API_RETRIES": "3",
+    "NEXT_PUBLIC_ENABLE_CSP": "true",
+    "NEXT_PUBLIC_ENABLE_HSTS": "true"
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com"
+      "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
+      "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender",
+      "NODE_ENV": "production"
     }
   }
 }

@@ -35,20 +35,6 @@ export function RatingFilter({
     }
   }
 
-  const handleMinRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value)
-    handleRatingChange('min', value)
-  }
-
-  const handleMaxRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value)
-    handleRatingChange('max', value)
-  }
-
-  const clearFilters = () => {
-    onRatingChange(1, 5)
-  }
-
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -78,97 +64,99 @@ export function RatingFilter({
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
       >
-        <Filter className="h-5 w-5 text-gray-600" />
+        <Filter className="h-4 w-4" />
         <span className="text-sm font-medium">
-          Rating: {minRating}-{maxRating} {getRatingLabel(minRating)}
+          {minRating === 0 && maxRating === 5 
+            ? 'All Ratings' 
+            : `${getRatingLabel(minRating)} - ${getRatingLabel(maxRating)}`
+          }
         </span>
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {/* Dropdown Panel */}
+      {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+        <div className="absolute top-full left-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Rating Filter</h3>
+              <h3 className="text-sm font-semibold text-gray-900">Rating Filter</h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-full hover:bg-gray-100"
+                className="text-gray-400 hover:text-gray-600"
               >
-                <X className="h-5 w-5 text-gray-600" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            {/* Rating Display */}
-            <div className="flex items-center justify-center mb-6">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-gray-900 mb-2">
-                  {minRating}-{maxRating}
-                </div>
-                <div className="flex justify-center space-x-1">
-                  {renderStars(minRating)}
-                </div>
-                <div className="text-sm text-gray-600 mt-2">
-                  {getRatingLabel(minRating)}
-                </div>
+            {/* Minimum Rating */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Minimum Rating
+              </label>
+              <div className="flex items-center space-x-2">
+                {renderStars(minRating)}
+                <span className="text-sm text-gray-600">{getRatingLabel(minRating)}</span>
               </div>
+              <input
+                type="range"
+                min="0"
+                max="5"
+                step="1"
+                value={minRating}
+                onChange={(e) => handleRatingChange('min', parseInt(e.target.value))}
+                className="w-full mt-2"
+              />
             </div>
 
-            {/* Min Rating Slider */}
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-700">Minimum Rating</label>
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    step="0.5"
-                    value={minRating}
-                    onChange={handleMinRatingChange}
-                    className="flex-1"
-                  />
-                  <span className="text-sm font-medium text-gray-600 w-12">
-                    {minRating} {getRatingLabel(minRating)}
-                  </span>
-                </div>
+            {/* Maximum Rating */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Maximum Rating
+              </label>
+              <div className="flex items-center space-x-2">
+                {renderStars(maxRating)}
+                <span className="text-sm text-gray-600">{getRatingLabel(maxRating)}</span>
               </div>
+              <input
+                type="range"
+                min="0"
+                max="5"
+                step="1"
+                value={maxRating}
+                onChange={(e) => handleRatingChange('max', parseInt(e.target.value))}
+                className="w-full mt-2"
+              />
+            </div>
 
-              {/* Max Rating Slider */}
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700">Maximum Rating</label>
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="range"
-                      min="1"
-                      max="5"
-                      step="0.5"
-                      value={maxRating}
-                      onChange={handleMaxRatingChange}
-                      className="flex-1"
-                    />
-                    <span className="text-sm font-medium text-gray-600 w-12">
-                      {maxRating} {getRatingLabel(maxRating)}
-                    </span>
-                  </div>
-                </div>
+            {/* Quick Filters */}
+            <div className="pt-4 border-t border-gray-200">
+              <div className="text-sm font-medium text-gray-700 mb-2">Quick Filters</div>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => onRatingChange(0, 5)}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                >
+                  All Ratings
+                </button>
+                <button
+                  onClick={() => onRatingChange(4, 5)}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                >
+                  4+ Stars
+                </button>
+                <button
+                  onClick={() => onRatingChange(3, 5)}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                >
+                  3+ Stars
+                </button>
+                <button
+                  onClick={() => onRatingChange(2, 5)}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
+                >
+                  2+ Stars
+                </button>
               </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-between pt-4 border-t">
-              <button
-                onClick={clearFilters}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
-              >
-                Clear
-              </button>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Apply
-              </button>
             </div>
           </div>
         </div>

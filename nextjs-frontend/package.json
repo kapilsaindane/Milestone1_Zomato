@@ -7,33 +7,42 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "export": "next export",
+    "deploy": "npm run build && npm run export",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
-    "next": "14.0.4",
-    "react": "^18",
-    "react-dom": "^18",
     "@next/font": "14.0.4",
-    "typescript": "^5",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@tanstack/react-query": "^5.8.4",
+    "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/node": "^20",
-    "tailwindcss": "^3.3.0",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
+    "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "tailwind-merge": "^2.2.0",
+    "date-fns": "^2.30.0",
     "lucide-react": "^0.294.0",
+    "next": "^14.2.35",
+    "postcss": "^8",
+    "react": "^18",
+    "react-dom": "^18",
     "recharts": "^2.8.0",
-    "axios": "^1.6.2",
-    "@tanstack/react-query": "^5.8.4",
-    "date-fns": "^2.30.0"
+    "tailwind-merge": "^2.2.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vercel/analytics": "^1.1.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0"
+    "next-pwa": "^2.0.2"
   }
 }
