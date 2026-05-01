@@ -1,13 +1,15 @@
 [server]
 port = 8501
-address = "localhost"
-headless = false
+address = "0.0.0.0"
+headless = true
 enableCORS = false
 enableXsrfProtection = false
 maxUploadSize = 200
+enableWebsocketCompression = false
 
 [browser]
 gatherUsageStats = false
+serverAddress = "0.0.0.0:8501"
 
 [theme]
 primaryColor = "#FF6B6B"
@@ -17,3 +19,6 @@ textColor = "#262730"
 
 [logger]
 level = "info"
+
+[client]
+caching = true
