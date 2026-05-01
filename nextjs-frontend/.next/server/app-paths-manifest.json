@@ -1,10 +1,4 @@
 {
   "/_not-found": "app/_not-found.js",
-  "/screens/page": "app/screens/page.js",
-  "/social/page": "app/social/page.js",
-  "/preferences-enhanced/page": "app/preferences-enhanced/page.js",
-  "/search-enhanced/page": "app/search-enhanced/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/(auth)/register/page": "app/(auth)/register/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js"
+  "/page": "app/page.js"
 }

@@ -4,7 +4,6 @@
   "env": {
     "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
     "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender",
-    "NODE_ENV": "production",
-    "NPM_CONFIG_LEGACY_PEER_DEPS": "true"
+    "NODE_ENV": "production"
   }
 }
