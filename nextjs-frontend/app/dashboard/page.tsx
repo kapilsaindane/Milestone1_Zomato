@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { SimpleCard, RestaurantSimpleCard } from '@/components/ui/simple-card'
+import { Button } from '@/components/ui/button'
 import { 
   TrendingUp, 
   Users, 
