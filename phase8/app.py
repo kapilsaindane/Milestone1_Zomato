@@ -3,10 +3,9 @@ import sys
 import os
 from pathlib import Path
 
-# Add parent directory to path for imports
+# Add current directory to path for imports
 PHASE8_ROOT = Path(__file__).resolve().parent
-PROJECT_ROOT = PHASE8_ROOT.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PHASE8_ROOT))
 
 from components.sidebar import render_sidebar
 from components.preferences import render_preferences
