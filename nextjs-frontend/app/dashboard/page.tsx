@@ -166,7 +166,12 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{Math.round((stats?.satisfactionScore || 0) * 100)}%</div>
-            <Progress value={(stats?.satisfactionScore || 0) * 100} className="mt-2" />
+            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div 
+                className="bg-blue-600 h-2 rounded-full" 
+                style={{ width: `${(stats?.satisfactionScore || 0) * 100}%` }}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -206,9 +211,9 @@ export default function DashboardPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {rec.restaurantName}
                     </h3>
-                    <Badge variant="secondary">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                       {Math.round(rec.confidenceScore * 100)}% match
-                    </Badge>
+                    </span>
                   </div>
                   <p className="text-sm text-gray-600 mt-1">{rec.cuisine}</p>
                   <p className="text-sm text-gray-700 mt-2">{rec.explanation}</p>
