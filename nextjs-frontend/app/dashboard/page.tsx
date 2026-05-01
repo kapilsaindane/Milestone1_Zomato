@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { SimpleCard, RestaurantSimpleCard } from '@/components/ui/simple-card'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { 
   TrendingUp, 
   Users, 
@@ -124,7 +125,7 @@ export default function DashboardPage() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
-          <Button variant="outline" onClick={logout}>
+          <Button className="border border-gray-300 bg-white hover:bg-gray-50 text-gray-900" onClick={logout}>
             Sign Out
           </Button>
         </div>
