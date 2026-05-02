@@ -6,18 +6,20 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from fastapi import BackgroundTasks
 
+# Import phase modules
+import sys
+backend_dir = Path(__file__).parent.parent
+project_root = backend_dir.parent
+sys.path.insert(0, str(backend_dir))
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(project_root / "phase2" / "src"))
+
 from models.schemas import (
     PreferenceProfileRequest, PreferenceProfileResponse,
     RecommendationResponse, PhaseStatusResponse, PhaseInfo,
     PhaseStatus, SearchResult, AnalyticsSummary, BudgetLevel
 )
 from core.config import settings
-
-# Import phase modules
-import sys
-project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root))
-sys.path.insert(0, str(project_root / "phase2" / "src"))
 sys.path.insert(0, str(project_root / "phase3" / "src"))
 sys.path.insert(0, str(project_root / "phase4" / "src"))
 

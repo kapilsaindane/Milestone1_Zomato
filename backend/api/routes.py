@@ -1,7 +1,12 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from typing import List, Dict, Any
 import json
+import sys
 from pathlib import Path
+
+# Add backend directory to Python path for Streamlit deployment
+backend_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_dir))
 
 from services.phase_service import PhaseService
 from models.schemas import (
