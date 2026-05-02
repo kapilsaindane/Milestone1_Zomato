@@ -1,60 +1,49 @@
 'use client'
 
-import { useState } from 'react'
-import { Search, MapPin, Star, Clock, Filter, ChevronDown } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Search, MapPin, Star, Clock, Filter, ChevronDown, Loader2 } from 'lucide-react'
+import { huggingFaceService, Restaurant } from '../lib/huggingface'
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('New York')
   const [selectedCuisine, setSelectedCuisine] = useState('All Cuisines')
   const [priceRange, setPriceRange] = useState('All Prices')
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const restaurants = [
-    {
-      id: 1,
-      name: "The Garden Bistro",
-      cuisine: "Italian",
-      rating: 4.5,
-      reviews: 234,
-      distance: "0.8 km",
-      deliveryTime: "25-35 min",
-      price: "$$",
-      image: "/api/placeholder/300/200"
-    },
-    {
-      id: 2,
-      name: "Sushi Master",
-      cuisine: "Japanese",
-      rating: 4.8,
-      reviews: 189,
-      distance: "1.2 km",
-      deliveryTime: "30-40 min",
-      price: "$$$",
-      image: "/api/placeholder/300/200"
-    },
-    {
-      id: 3,
-      name: "Burger Palace",
-      cuisine: "American",
-      rating: 4.2,
-      reviews: 412,
-      distance: "0.5 km",
-      deliveryTime: "20-30 min",
-      price: "$",
-      image: "/api/placeholder/300/200"
-    },
-    {
-      id: 4,
-      name: "Spice Garden",
-      cuisine: "Indian",
-      rating: 4.6,
-      reviews: 156,
-      distance: "1.5 km",
-      deliveryTime: "35-45 min",
-      price: "$$",
-      image: "/api/placeholder/300/200"
+  // Fetch restaurants from Hugging Face
+  useEffect(() => {
+    fetchRestaurants();
+  }, []);
+
+  const fetchRestaurants = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await huggingFaceService.getRestaurants(1, 20, {
+        cuisine: selectedCuisine,
+        searchQuery: searchQuery,
+        priceRange: priceRange
+      });
+      setRestaurants(response.data);
+    } catch (err) {
+      setError('Failed to load restaurants. Please try again.');
+      console.error('Error fetching restaurants:', err);
+    } finally {
+      setLoading(false);
     }
-  ]
+  };
+
+  // Refetch when filters change
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchRestaurants();
+    }, 500); // Debounce search
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery, selectedCuisine, priceRange]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -206,47 +195,83 @@ export default function Home() {
 
           {/* Restaurant Cards */}
           <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {restaurants.map((restaurant) => (
-                <div key={restaurant.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                  {/* Restaurant Image */}
-                  <div className="h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
-                    <span className="text-gray-400">Restaurant Image</span>
+            {loading ? (
+              <div className="flex justify-center items-center py-12">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+                <span className="ml-2 text-gray-600">Loading restaurants...</span>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <div className="text-red-500 mb-4">{error}</div>
+                <button 
+                  onClick={fetchRestaurants}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : restaurants.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-500 mb-4">No restaurants found matching your criteria.</div>
+                <button 
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedCuisine('All Cuisines');
+                    setPriceRange('All Prices');
+                  }}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {restaurants.map((restaurant) => (
+                  <div key={restaurant.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                    {/* Restaurant Image */}
+                    <div className="h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                      <span className="text-gray-400">Restaurant Image</span>
+                    </div>
+
+                    {/* Restaurant Info */}
+                    <div className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="font-semibold text-gray-900">{restaurant.name}</h3>
+                        <span className="text-sm font-medium text-gray-700">{restaurant.price}</span>
+                      </div>
+
+                      <p className="text-sm text-gray-600 mb-3">{restaurant.cuisine}</p>
+
+                      {/* Rating */}
+                      <div className="flex items-center mb-3">
+                        <div className="flex items-center mr-2">
+                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          <span className="ml-1 text-sm font-medium">{restaurant.rating}</span>
+                        </div>
+                        <span className="text-sm text-gray-500">({restaurant.reviews} reviews)</span>
+                      </div>
+
+                      {/* Delivery Info */}
+                      <div className="flex items-center justify-between text-sm text-gray-600">
+                        <div className="flex items-center">
+                          <MapPin className="h-4 w-4 mr-1" />
+                          <span>{restaurant.distance}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          <span>{restaurant.deliveryTime}</span>
+                        </div>
+                      </div>
+
+                      {/* Additional Info */}
+                      {restaurant.description && (
+                        <p className="text-xs text-gray-500 mt-3 line-clamp-2">{restaurant.description}</p>
+                      )}
+                    </div>
                   </div>
-
-                  {/* Restaurant Info */}
-                  <div className="p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-gray-900">{restaurant.name}</h3>
-                      <span className="text-sm font-medium text-gray-700">{restaurant.price}</span>
-                    </div>
-
-                    <p className="text-sm text-gray-600 mb-3">{restaurant.cuisine}</p>
-
-                    {/* Rating */}
-                    <div className="flex items-center mb-3">
-                      <div className="flex items-center mr-2">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="ml-1 text-sm font-medium">{restaurant.rating}</span>
-                      </div>
-                      <span className="text-sm text-gray-500">({restaurant.reviews} reviews)</span>
-                    </div>
-
-                    {/* Delivery Info */}
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        <span>{restaurant.distance}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{restaurant.deliveryTime}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
