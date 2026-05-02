@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeastFind - Screen Images</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #b7131a;
+            margin-bottom: 10px;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .image-card:hover {
+            transform: translateY(-5px);
+        }
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .image-info {
+            padding: 15px;
+        }
+        .image-info h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .image-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #b7131a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍽️ FeastFind Screen Images</h1>
+        <p>Images extracted from the FeastFind restaurant recommendation interface</p>
+    </div>
+
+    <div class="image-grid">
+        <div class="image-card">
+            <img src="hero_background.jpg" alt="Hero Background">
+            <div class="image-info">
+                <h3>Hero Background</h3>
+                <p>Dining table with gourmet dishes - main hero section background</p>
+            </div>
+        </div>
+
+        <div class="image-card">
+            <img src="user_profile.jpg" alt="User Profile">
+            <div class="image-info">
+                <h3>User Profile</h3>
+                <p>Professional user profile picture for the navigation bar</p>
+            </div>
+        </div>
+
+        <div class="image-card">
+            <img src="restaurant_lumina.jpg" alt="Lumina Osteria">
+            <div class="image-info">
+                <h3>Lumina Osteria</h3>
+                <p>Modern Italian restaurant interior - Financial District</p>
+            </div>
+        </div>
+
+        <div class="image-card">
+            <img src="restaurant_zenith.jpg" alt="The Zenith">
+            <div class="image-info">
+                <h3>The Zenith</h3>
+                <p>New American restaurant with craft cocktails - SoMa</p>
+            </div>
+        </div>
+
+        <div class="image-card">
+            <img src="restaurant_kizu.jpg" alt="Kizu Sushi">
+            <div class="image-info">
+                <h3>Kizu Sushi</h3>
+                <p>Upscale sushi bar with omakase - Japantown</p>
+            </div>
+        </div>
+
+        <div class="image-card">
+            <img src="restaurant_verdant.jpg" alt="Verdant Cafe">
+            <div class="image-info">
+                <h3>Verdant Cafe</h3>
+                <p>Plant-based cafe with healthy options - Mission</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="../" class="back-link">← Back to Main Project</a>
+    </div>
+</body>
+</html>
