@@ -3,7 +3,6 @@
   "framework": "nextjs",
   "installCommand": "npm install --force --legacy-peer-deps --ignore-scripts --no-audit --no-fund",
   "buildCommand": "npm run build",
-  "rootDirectory": "nextjs-frontend",
   "env": {
     "NEXT_PUBLIC_API_URL": "https://restaurant-recommender-api.onrender.com",
     "NEXT_PUBLIC_APP_NAME": "AI Restaurant Recommender",
