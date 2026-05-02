@@ -181,35 +181,38 @@ class PhaseService:
             if not data_path.exists():
                 raise Exception("Cleaned dataset not found. Please run phase1 first.")
             
-            import pandas as pd
-            df = pd.read_csv(data_path)
+            # Use basic CSV reading instead of pandas
+            import csv
+            with open(data_path, 'r', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                data = list(reader)
             
             # Apply filters
-            filtered_df = df.copy()
+            filtered_data = data.copy()
             
             if location:
-                filtered_df = filtered_df[filtered_df['location'].str.contains(location, case=False, na=False)]
+                filtered_data = [row for row in filtered_data if location.lower() in row.get('location', '').lower()]
             
             if cuisine:
-                filtered_df = filtered_df[filtered_df['cuisines'].str.contains(cuisine, case=False, na=False)]
+                filtered_data = [row for row in filtered_data if cuisine.lower() in row.get('cuisines', '').lower()]
             
             if query:
-                filtered_df = filtered_df[
-                    filtered_df['name'].str.contains(query, case=False, na=False) |
-                    filtered_df['cuisines'].str.contains(query, case=False, na=False)
+                filtered_data = [row for row in filtered_data if 
+                    query.lower() in row.get('name', '').lower() or 
+                    query.lower() in row.get('cuisines', '').lower()
                 ]
             
             # Limit results
-            result_df = filtered_df.head(limit)
+            results = filtered_data[:limit]
             
             # Convert to restaurant info format
             restaurants = []
-            for _, row in result_df.iterrows():
+            for row in results:
                 restaurants.append({
                     "restaurant_name": row.get('name', ''),
                     "location": row.get('location', ''),
                     "cuisine": row.get('cuisines', ''),
-                    "primary_cuisine": row.get('cuisines', '').split(',')[0] if pd.notna(row.get('cuisines')) else '',
+                    "primary_cuisine": row.get('cuisines', '').split(',')[0] if row.get('cuisines') else '',
                     "rating": row.get('rate', 0),
                     "cost_for_two": row.get('cost', 0),
                     "votes": row.get('votes', 0),
@@ -219,7 +222,7 @@ class PhaseService:
             
             return SearchResult(
                 restaurants=restaurants,
-                total_found=len(filtered_df),
+                total_found=len(filtered_data),
                 search_time=0.1  # Placeholder
             )
             
@@ -235,26 +238,50 @@ class PhaseService:
             if not data_path.exists():
                 raise Exception("Cleaned dataset not found")
             
-            import pandas as pd
-            df = pd.read_csv(data_path)
+            # Use basic CSV reading instead of pandas
+            import csv
+            from collections import Counter
+            
+            with open(data_path, 'r', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                data = list(reader)
             
             # Calculate analytics
-            total_restaurants = len(df)
+            total_restaurants = len(data)
             
             # Popular locations
-            location_counts = df['location'].value_counts().head(10)
-            popular_locations = [{"location": loc, "count": int(count)} for loc, count in location_counts.items()]
+            location_counter = Counter(row.get('location', '') for row in data)
+            popular_locations = [{"location": loc, "count": count} for loc, count in location_counter.most_common(10)]
             
             # Popular cuisines
-            cuisine_series = df['cuisines'].str.split(',').explode().str.strip()
-            cuisine_counts = cuisine_series.value_counts().head(10)
-            popular_cuisines = [{"cuisine": cuisine, "count": int(count)} for cuisine, count in cuisine_counts.items()]
+            all_cuisines = []
+            for row in data:
+                cuisines = row.get('cuisines', '').split(',')
+                all_cuisines.extend([c.strip() for c in cuisines if c.strip()])
+            
+            cuisine_counter = Counter(all_cuisines)
+            popular_cuisines = [{"cuisine": cuisine, "count": count} for cuisine, count in cuisine_counter.most_common(10)]
             
             # Average ratings
+            ratings = [float(row.get('rate', 0)) for row in data if row.get('rate') and row.get('rate').replace('.', '').isdigit()]
+            overall_avg = sum(ratings) / len(ratings) if ratings else 0
+            
+            # Ratings by location
+            location_ratings = {}
+            for location in location_counter.keys():
+                location_data = [float(row.get('rate', 0)) for row in data if row.get('location') == location and row.get('rate') and row.get('rate').replace('.', '').isdigit()]
+                location_ratings[location] = sum(location_data) / len(location_data) if location_data else 0
+            
+            # Ratings by cuisine
+            cuisine_ratings = {}
+            for cuisine in cuisine_counter.keys():
+                cuisine_data = [float(row.get('rate', 0)) for row in data if cuisine in row.get('cuisines', '') and row.get('rate') and row.get('rate').replace('.', '').isdigit()]
+                cuisine_ratings[cuisine] = sum(cuisine_data) / len(cuisine_data) if cuisine_data else 0
+            
             avg_ratings = {
-                "overall": df['rate'].mean(),
-                "by_location": df.groupby('location')['rate'].mean().to_dict(),
-                "by_cuisine": df.groupby(df['cuisines'].str.split(',').str[0])['rate'].mean().to_dict()
+                "overall": overall_avg,
+                "by_location": location_ratings,
+                "by_cuisine": cuisine_ratings
             }
             
             return AnalyticsSummary(
@@ -365,9 +392,11 @@ class PhaseService:
         try:
             data_path = Path(__file__).parent.parent.parent / "phase1" / "output" / "zomato_cleaned.csv"
             if data_path.exists():
-                import pandas as pd
-                df = pd.read_csv(data_path)
-                return len(df)
+                import csv
+                with open(data_path, 'r', encoding='utf-8') as file:
+                    reader = csv.DictReader(file)
+                    data = list(reader)
+                    return len(data)
             return 0
         except:
             return 0
